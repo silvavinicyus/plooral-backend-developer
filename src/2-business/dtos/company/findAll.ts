@@ -6,7 +6,8 @@ import { IPaginatedResponse, IServiceOptions } from '../serviceOptions'
 
 export interface IInputFindAllCompaniesDto
   extends IServiceOptions<keyof ICompanyEntityKeys, string | number> {
-  where?: IWhere<keyof ICompanyEntityKeys, string | number>[]
+  whereAnd?: IWhere<keyof ICompanyEntityKeys, string | number>[]
+  whereOr?: IWhere<keyof ICompanyEntityKeys, string | number>[]
 }
 
 export type IOutputFindAllCompaniesDto = Either<
