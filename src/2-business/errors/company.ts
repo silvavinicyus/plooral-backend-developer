@@ -17,7 +17,7 @@ export class CompanyErrors extends IError {
       statusCode: 404,
       body: {
         code: 'CMP-002',
-        message: 'Company not foun!',
+        message: 'Company not found!',
         shortMessage: 'notFound',
       },
     })
