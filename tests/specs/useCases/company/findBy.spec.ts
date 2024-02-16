@@ -8,7 +8,7 @@ import { container } from '@shared/ioc/container'
 import { fakeCompanyEntity } from '@tests/mocks/entities/company'
 import { FakeCompanyRepository } from '@tests/mocks/repositories/iCompanyRepository'
 
-describe('Create Company Use Case', () => {
+describe('Find By Company Use Case', () => {
   beforeAll(() => {
     container
       .bind(ICompanyRepositoryToken)
