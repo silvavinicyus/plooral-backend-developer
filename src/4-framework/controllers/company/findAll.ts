@@ -8,10 +8,6 @@ import { Request, Response } from 'express'
 export class FindAllCompaniesController {
   async handle(request: Request, response: Response): Promise<Response> {
     try {
-      console.log({
-        value: request.query?.name as string,
-      })
-
       const useCase = container.get(FindAllCompaniesUseCase)
       const input = new InputFindAllCompanies({
         contains: [
