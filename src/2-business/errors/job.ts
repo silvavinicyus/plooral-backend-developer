@@ -77,4 +77,37 @@ export class JobErrors extends IError {
       },
     })
   }
+
+  public static alreadyPublished(): IError {
+    return new JobErrors({
+      statusCode: 500,
+      body: {
+        code: 'JOB-008',
+        message: 'This job have already been published!',
+        shortMessage: 'alreadyPublished',
+      },
+    })
+  }
+
+  public static alreadyArchived(): IError {
+    return new JobErrors({
+      statusCode: 500,
+      body: {
+        code: 'JOB-009',
+        message: 'This job have already been archived!',
+        shortMessage: 'alreadyArchived',
+      },
+    })
+  }
+
+  public static terminalState(): IError {
+    return new JobErrors({
+      statusCode: 500,
+      body: {
+        code: 'JOB-010',
+        message: 'This job is already rejected or archived',
+        shortMessage: 'terminalState',
+      },
+    })
+  }
 }
