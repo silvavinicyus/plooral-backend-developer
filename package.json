@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@jest/types": "^29.6.3",
+    "aws-sdk": "^2.1559.0",
     "class-validator": "^0.14.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
