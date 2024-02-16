@@ -36,7 +36,7 @@ JobModel.init(
     },
     notes: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.ENUM('draft', 'published', 'archived', 'rejected'),
