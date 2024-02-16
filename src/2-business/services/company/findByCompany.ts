@@ -25,6 +25,7 @@ export class FindByCompanyService
       const companyResult = await this.companyRepository.findBy(props)
 
       if (!companyResult) {
+        console.error('Error: not found')
         return left(CompanyErrors.notFound())
       }
 
