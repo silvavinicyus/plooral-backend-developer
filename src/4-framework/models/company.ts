@@ -7,10 +7,11 @@ export class CompanyModel extends Model<ICompanyEntity> {}
 CompanyModel.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: false,
       unique: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUID,
     },
     name: {
       type: DataTypes.STRING,
