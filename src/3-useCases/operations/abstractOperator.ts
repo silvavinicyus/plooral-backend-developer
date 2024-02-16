@@ -31,7 +31,6 @@ export abstract class AbstractUseCase<I, O> {
           ),
         }))
 
-        console.log(JSON.stringify(details, null, 2))
         throw validationError(details)
       }
       throw error

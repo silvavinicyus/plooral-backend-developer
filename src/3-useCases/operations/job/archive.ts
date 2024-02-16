@@ -38,6 +38,10 @@ export class ArchiveJobUseCase extends AbstractUseCase<
       return left(job.value)
     }
 
+    if (job.value.status === JobStatusEnum.ARCHIVED) {
+      return left(JobErrors.alreadyArchived())
+    }
+
     const jobResult = await this.updateJob.exec(
       {
         status: JobStatusEnum.ARCHIVED,
