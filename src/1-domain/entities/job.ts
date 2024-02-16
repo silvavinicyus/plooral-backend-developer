@@ -15,7 +15,7 @@ export interface IJobEntity extends ITimestamps {
   title: string
   description: string
   location: string
-  notes: string
+  notes?: string
   status: JobStatusEnum
 }
 
