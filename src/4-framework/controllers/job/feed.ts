@@ -1,5 +1,5 @@
 import '@framework/ioc/inversify.config'
-import { GetFeedJobsUseCase } from '@root/src/3-useCases/operations/job/feed'
+import { GetFeedJobsUseCase } from '@useCases/operations/job/feed'
 import { IError } from '@shared/IError'
 import { container } from '@shared/ioc/container'
 import { Request, Response } from 'express'

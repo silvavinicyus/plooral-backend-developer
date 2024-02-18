@@ -1,6 +1,6 @@
 import '@framework/ioc/inversify.config'
-import { CreateJobUseCase } from '@root/src/3-useCases/operations/job/create'
-import { InputCreateJob } from '@root/src/3-useCases/serializers/job/inputCreate'
+import { CreateJobUseCase } from '@useCases/operations/job/create'
+import { InputCreateJob } from '@useCases/serializers/job/inputCreate'
 import { IError } from '@shared/IError'
 import { container } from '@shared/ioc/container'
 import { Request, Response } from 'express'

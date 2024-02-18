@@ -1,6 +1,6 @@
 import '@framework/ioc/inversify.config'
-import { FindAllCompaniesUseCase } from '@root/src/3-useCases/operations/company/findAll'
-import { InputFindAllCompanies } from '@root/src/3-useCases/serializers/company/inputFindAll'
+import { FindAllCompaniesUseCase } from '@useCases/operations/company/findAll'
+import { InputFindAllCompanies } from '@useCases/serializers/company/inputFindAll'
 import { IError } from '@shared/IError'
 import { container } from '@shared/ioc/container'
 import { Request, Response } from 'express'

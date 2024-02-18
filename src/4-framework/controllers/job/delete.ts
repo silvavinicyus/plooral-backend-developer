@@ -1,6 +1,6 @@
 import '@framework/ioc/inversify.config'
-import { DeleteJobUseCase } from '@root/src/3-useCases/operations/job/delete'
-import { InputDeleteJob } from '@root/src/3-useCases/serializers/job/inputDelete'
+import { DeleteJobUseCase } from '@useCases/operations/job/delete'
+import { InputDeleteJob } from '@useCases/serializers/job/inputDelete'
 import { IError } from '@shared/IError'
 import { container } from '@shared/ioc/container'
 import { Request, Response } from 'express'

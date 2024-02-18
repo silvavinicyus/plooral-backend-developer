@@ -5,8 +5,8 @@ import { left, right } from '@shared/either'
 import { container } from '@shared/ioc/container'
 import { fakeCompanyEntity } from '@tests/mocks/entities/company'
 import { FakeCompanyRepository } from '@tests/mocks/repositories/iCompanyRepository'
-import { FindAllCompaniesUseCase } from '@root/src/3-useCases/operations/company/findAll'
-import { InputFindAllCompanies } from '@root/src/3-useCases/serializers/company/inputFindAll'
+import { FindAllCompaniesUseCase } from '@useCases/operations/company/findAll'
+import { InputFindAllCompanies } from '@useCases/serializers/company/inputFindAll'
 
 describe('Find All Companies Use case', () => {
   beforeAll(() => {
