@@ -12,9 +12,9 @@ const config: Config.InitialOptions = {
     'src/**/*.ts',
     '!src/4-framework/**/*.ts',
     '!src/2-business/dto/**/*.ts',
-    '!src/2-business/useCases/*.ts',
-    '!src/3-controller/operations/*.ts',
-    '!src/3-controller/serializers/*.ts',
+    '!src/2-business/services/*.ts',
+    '!src/3-useCases/operations/*.ts',
+    '!src/3-useCases/serializers/*.ts',
     '!src/shared/*',
   ],
   coveragePathIgnorePatterns: [

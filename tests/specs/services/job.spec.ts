@@ -1,7 +1,10 @@
 import { IInputCreateJobDto } from '@business/dtos/jobs/create'
 import { IInputDeleteJobDto } from '@business/dtos/jobs/delete'
 import { IInputFindByJobDto } from '@business/dtos/jobs/findBy'
+import { IInputSendJobToQueueDto } from '@business/dtos/jobs/sendToQueue'
 import { JobErrors } from '@business/errors/job'
+import { QueueErrors } from '@business/errors/queue'
+import { IQueueServiceToken } from '@business/extServices/queue/iQueueService'
 import {
   IInputUpdateJob,
   IJobRepositoryToken,
@@ -9,10 +12,15 @@ import {
 import { CreateJobService } from '@business/services/job/createJobService'
 import { DeleteJobService } from '@business/services/job/deleteJobService'
 import { FindByJobService } from '@business/services/job/findByJobService'
+import { SendJobToQueueService } from '@business/services/job/sendJobToQueueService'
 import { UpdateJobService } from '@business/services/job/updateJobService'
 import { JobStatusEnum } from '@domain/entities/job'
 import { container } from '@shared/ioc/container'
 import { fakeJobEntity } from '@tests/mocks/entities/job'
+import {
+  FakeQueueService,
+  fakeQueueServiceSendMessage,
+} from '@tests/mocks/extServices/fakeQueueService'
 import {
   FakeJobRepository,
   fakeJobRepositoryCreate,
@@ -24,6 +32,7 @@ import {
 describe('Job Service Tests', () => {
   beforeAll(() => {
     container.bind(IJobRepositoryToken).to(FakeJobRepository).inSingletonScope()
+    container.bind(IQueueServiceToken).to(FakeQueueService).inSingletonScope()
   })
 
   afterAll(() => {
@@ -183,6 +192,33 @@ describe('Job Service Tests', () => {
 
       expect(result.isRight()).toBeTruthy()
       expect(result.isLeft()).toBeFalsy()
+    })
+  })
+
+  describe('Send Job To Queue Service', () => {
+    const input: IInputSendJobToQueueDto = fakeJobEntity
+
+    test('Should fail to send a job to publish queue if queue service failed', async () => {
+      fakeQueueServiceSendMessage.mockImplementationOnce(async () => {
+        throw new Error()
+      })
+
+      const sut = container.get(SendJobToQueueService)
+      const result = await sut.exec(input)
+
+      expect(result.isLeft()).toBeTruthy()
+      expect(result.isRight()).toBeFalsy()
+      expect(result.value).toEqual(QueueErrors.errorToQueue())
+    })
+
+    test('Should have success to send a job to publish queue', async () => {
+      fakeQueueServiceSendMessage.mockImplementationOnce(async () => void 0)
+
+      const sut = container.get(SendJobToQueueService)
+      const result = await sut.exec(input)
+
+      expect(result.isLeft()).toBeFalsy()
+      expect(result.isRight()).toBeTruthy()
     })
   })
 })

@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@business/*": ["src/2-business/*"],
-      "@controller/*": ["src/3-controller/*"],
+      "@useCases/*": ["src/3-useCases/*"],
       "@domain/*": ["src/1-domain/*"],
       "@framework/*": ["src/4-framework/*"],
       "@shared/*": ["src/shared/*"],

@@ -39,6 +39,24 @@ describe('Archive Job UseCase', () => {
     expect(result.value).toEqual(JobErrors.notFound())
   })
 
+  test('Should fail to archive a job if its alreay archived', async () => {
+    const findBy = container.get(FindByJobService)
+    jest
+      .spyOn(findBy, 'exec')
+      .mockReturnValueOnce(
+        Promise.resolve(
+          right({ ...fakeJobEntity, status: JobStatusEnum.ARCHIVED })
+        )
+      )
+
+    const sut = container.get(ArchiveJobUseCase)
+    const result = await sut.run(input)
+
+    expect(result.isLeft()).toBeTruthy()
+    expect(result.isRight()).toBeFalsy()
+    expect(result.value).toEqual(JobErrors.alreadyArchived())
+  })
+
   test('Should fail to archive a job if update job service failed', async () => {
     const findBy = container.get(FindByJobService)
     jest
