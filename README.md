@@ -1,80 +1,169 @@
-# Backend Developer Technical Assessment
+# Plooral Backend Developer Test
+ This project propose a solution to an application capable of managing job offers from companies pre-registered in the application. The project consists of: 
+ <ul>
+  <li>
+    Backend:  A backend responsible for showing companies, and handling job offers. 
+  </li>
+</ul>
 
-## Welcome!
+ ## Requirements
 
-We're excited to have you participate in our Backend Developer technical assessment. This test is designed to gauge your expertise in backend development, with a focus on architectural and organizational skills. Below, you'll find comprehensive instructions to set up and complete the project. Remember, completing every step is not mandatory; some are optional but can enhance your application.
+ <table>
+   <thead>
+     <th> Requirements </th>
+     <th> Version </th>
+     <th> Install </th>
+   </thead>
+   <tbody>
+     <tr>
+       <td>
+         NodeJs
+       </td>
+       <td>
+         20.11.0
+       </td>
+       <td>
+         <a href="https://nodejs.org/download/release/v20.11.0/"> Install </a>
+       </td>
+     </tr>
+     <tr>
+       <td>
+         Yarn
+       </td>
+       <td>
+         1.22.19
+       </td>
+       <td>
+         <a href="https://classic.yarnpkg.com/lang/en/docs/install/"> Install </a>
+       </td>
+     </tr>
+      <tr>
+       <td>
+         PostgreSQL
+       </td>
+       <td>
+         16.0-1
+       </td>
+       <td>
+         <a href="https://www.postgresql.org/download/"> Install </a>
+       </td>
+     </tr>
+   </tbody>
+ </table>
+ 
+ ## Backend 
+ 
+ ### Features
+ <ul>
+   <li> List all companies </li>
+   <li> Show a company </li>
+   <li> Create a job </li>
+   <li> Publish a job </li>
+   <li> Update a job </li>
+   <li> Remove a job </li>
+   <li> Archive a job </li>
+ </ul>
 
-## Assessment Overview
+ ### Architecture
+The chosen architecture was based on clean architecture, despite not applying all the concepts of clean architecture. Where the system is divided into layers, with the following responsibilities:
+<ul>
+  <li> The first "domain" layer is responsible for storing the entities that represent the application domain. </li>
+  <li> The second "business" layer is responsible for creating DTOs (Data Transfer Object), service and repository operating contracts, possible errors in services, in addition to the services themselves. </li>
+  <li> The third layer "useCases" stores the application's useCases, where some business rules are applied in addition to the validation of the serializers, which bring the data sent by the web environment </li>
+  <li> The fourth layer is where the implementations of repositories and services are located, which need to respect the contracts defined in layer 2, dependency injections are carried out, routes and real "controllers" are defined, which receive the data coming from the API endpoints and pass them on. for layer 3 controllers. This layer is where the use of frameworks, external libraries, etc. comes in heavily. Possible adapters can also be created in this layer that work to translate what is received by the database, for example, to what is expected by the system, controllers, etc.</li>
+</ul>
 
-Your task is to develop a NodeJS API for a job posting management application. Analyze the application details and use cases, and translate them into functional endpoints.
+### Banco de dados e variáveis de ambiente
+<li>
+  The code for creating the database tables can be found in the folder <a href="https://github.com/silvavinicyus/plooral-backend-developer/blob/master/ddl/models.sql"> ddl </a>
+</li>
+<li>
+  In the project's root there is a .env.example file containing all the environment variables necessary for the system to work correctly. For correct configuration, it is necessary to create a ".env" file at the root of the project and add all variables from .env.example to this new .env file, adding the correct value for those variables based on your database configuration and accounts.
+</li>
 
-### Application Components
+### Install e Run
+  To run the project, the following steps must be executed:
+   <li> 
+     1 - Execute the ddl file located <a href="https://github.com/silvavinicyus/plooral-backend-developer/blob/master/ddl/models.sql"> here </a>  to create the database tables and company data. 
+   </li> 
+   
+   <li>
+     2 - Clone this repository in your computer.
 
-Your solution should incorporate the following components and libraries:
+    git clone git@github.com:silvavinicyus/plooral-backend-developer.git
+    
+   </li>
+   
+   <li>
+     3 - Via terminal navigate to the application folder.
 
-1. **Relational Database**: Utilize a SQL database (PostgreSQL 16) with two tables (`companies` and `jobs`). The DDL script in the `ddl` folder of this repository initializes these tables. The `companies` table is pre-populated with fictitious records, which you should not modify. Focus on managing records in the `jobs` table. You don't need to worry about setting up the database, consider the database is already running in the cloud. Your code only needs to handle database connections. To test your solution, use your own database running locally or in the server of your choice.
+    cd plooral-backend-developer
+    
+   </li>
+   
+   <li>
+     4 - Install the project dependencies by running the following command in (terminal / cmd):      
 
-2. **REST API**: Develop using NodeJS (version 20) and ExpressJS. This API will manage the use cases described below.
+    yarn install   
+   </li>
+                   
+After installing and preparing the environment, to execute the project it is only necessary to execute the following command in the (terminal / cmd):
+ 
+     yarn dev     
 
-3. **Serverless Environment**: Implement asynchronous, event-driven logic using AWS Lambda and AWS SQS for queue management.
+### Testes 
+ After installing the project dependendcies, to run the unit tests simple execute the following command in (terminal / cmd). 
 
-4. **Job Feed Repository**: Integrate a job feed with AWS S3. This feed should periodically update a JSON file reflecting the latest job postings.
-
-### User Actions
-
-Convert the following use cases into API endpoints:
-
-- `GET /companies`: List existing companies.
-- `GET /companies/:company_id`: Fetch a specific company by ID.
-- `POST /job`: Create a job posting draft.
-- `PUT /job/:job_id/publish`: Publish a job posting draft.
-- `PUT /job/:job_id`: Edit a job posting draft (title, location, description).
-- `DELETE /job/:job_id`: Delete a job posting draft.
-- `PUT /job/:job_id/archive`: Archive an active job posting.
-
-### Integration Features
-
-- Implement a `GET /feed` endpoint to serve a job feed in JSON format, containing published jobs (column `status = 'published'`). Use a caching mechanism to handle high traffic, fetching data from an S3 file updated periodically by an AWS Lambda function. The feed should return the job ID, title, description, company name and the date when the job was created. This endpoint should not query the database, the content must be fetched from S3.
-- This endpoint receives a massive number of requests every minute, so the strategy here is to implement a simple cache mechanism that will fetch a previously stored JSON file containing the published jobs and serve the content in the API. You need to implement a serverless component using AWS Lambda, that will periodically query the published jobs and store the content on S3. The `GET /feed` endpoint should fetch the S3 file and serve the content. You don't need to worry about implementing the schedule, assume it is already created using AWS EventBridge. You only need to create the Lambda component, using NodeJS 20 as a runtime.
-
-### Extra Feature (Optional)
-
-- **Job Moderation**: using artificial intelligence, we need to moderate the job content before allowing it to be published, to check for potential harmful content.
-Every time a user requests a job publication (`PUT /job/:job_id/publish`), the API should reply with success to the user, but the job should not be immediately published. It should be queued using AWS SQS, feeding the job to a Lambda component.
-Using OpenAI's free moderation API, create a Lambda component that will evaluate the job title and description, and test for hamrful content. If the content passes the evaluation, the component should change the job status to `published`, otherwise change to `rejected` and add the response from OpenAI API to the `notes` column.
+     yarn run test     
+ 
+ 
+### Libs & Frameworks 
+<table>
+  <thead>
+    <th> Lib </th>
+    <th> Version </th>
+  </thead>
+  <tbody>
+    <tr>
+      <td> NodeJs </td>
+      <td> 20.11.0 </td>
+    </tr>
+    <tr>
+      <td> AWS SDK </td>
+      <td> 2.1559.0 </td>
+    </tr>
+    <tr>
+      <td> Express.js </td>
+      <td> 4.18.2 </td>
+    </tr>
+    <tr>
+      <td> TypeScript </td>
+      <td> 5.3.3 </td>
+    </tr>
+    <tr>
+      <td> PostgreSQL </td>
+      <td> 16.0-1 </td>
+    </tr>
+    <tr>
+      <td> Jest </td>
+      <td> 29.5.0 </td>
+    </tr>
+    <tr>
+      <td> Sequelize </td>
+      <td> 6.35.2 </td>
+    </tr>
+    <tr>
+      <td> ESLint </td>
+      <td> 8.56.2 </td>
+    </tr>
+    <tr>
+      <td> Prettier </td>
+      <td> 3.2.4 </td>
+    </tr>
+  </tbody>
+</table>
 
 ### Bonus Questions
+1 - First of all, I would try to separate the OpenAI API calls and the database updates, so the serverless would only handle the OpenAI API calls, and send the results back to the API. If available, would improve the computational power of these serverless service, trying to improve response time. Then, back to the main API, we could store all the openai results in runtime memory, and when we have a 100 results (where the number would be a parameter that could be changed at anytime needed), we would update all these 100 results in the database and update the feed information service, also if we dont reach the 100 results in 10 minutes, we would update the database with the current amount of results and restart the count. This way, the serverless moderation service would only have to handle de moderation and the api would be responsible for all data changes in the database, also with the strategy of multi update after reaching X results or Y time, we would have a huge decrease in the number of database connections.
 
-1. Discuss scalability solutions for the job moderation feature under high load conditions. Consider that over time the system usage grows significantly, to the point where we will have thousands of jobs published every hour. Consider the API will be able to handle the requests, but the serverless component will be overwhelmed with requests to moderate the jobs. This will affect the database connections and calls to the OpenAI API. How would you handle those issues and what solutions would you implement to mitigate the issues?
-2. Propose a strategy for delivering the job feed globally with sub-millisecond latency. Consider now that we need to provide a low latency endpoint that can serve the job feed content worldwide. Using AWS as a cloud provider, what technologies would you need to use to implement this feature and how would you do it?
-
-## Instructions
-
-1. Fork this repository and create a branch named after yourself.
-2. Develop the solution in your branch.
-3. Use your AWS account or other environment of your choice to test and validate your solution.
-4. Update the README with setup and execution instructions.
-5. Complete your test by sending a message through the Plooral platform with your repository link and branch name.
-
-## Evaluation Criteria
-
-We will assess:
-
-- Knowledge of JavaScript, Node.js, Express.js.
-- Proficiency with serverless components (Lambda, SQS).
-- Application structure and layering.
-- Effective use of environment variables.
-- Implementation of unit tests, logging, and error handling.
-- Documentation quality and code readability.
-- Commit history and overall code organization.
-
-Good luck, and we're looking forward to seeing your innovative solutions!
-Implementation of the user actions and integration features is considered mandatory for the assessment. The extra feature and the bonus questions are optional, but we encourage you to complete them as well, it will give you an additional edge over other candidates.
-
-## A Note on the Use of AI Tools
-
-In today's evolving tech landscape, AI tools such as ChatGPT and GitHub Copilot have become valuable resources for developers. We recognize the potential of these tools in aiding problem-solving and coding. While we do not prohibit the use of AI in this assessment, we encourage you to primarily showcase your own creativity and problem-solving skills. Your ability to think critically and design solutions is what we're most interested in.
-
-That said, if you do choose to utilize AI tools, we would appreciate it if you could share details about this in your submission. Include the prompts you used, how you interacted with the AI, and how it influenced your development process. This will give us additional insight into your approach to leveraging such technologies effectively.
-
-Remember, this assessment is not just about getting to the solution, but also about demonstrating your skills, creativity, and how you navigate and integrate the use of emerging technologies in your work.
+2- I would create an EC2 instance in AWS, and configure a redis database for caching, that would be update by the API everytime that the a new job was published or a publish job was archived or removed. So this way, we would have a really fast endpoint to serve the feed globally. If needed, we could add some more instances and create a load balance to make this instances work together and avoid availability problems.
