@@ -1,14 +1,12 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable import/no-extraneous-dependencies */
-const { Pool } = require('pg')
-const doenv = require('dotenv')
+import pg from 'pg'
+import dotenv from 'dotenv'
 
-doenv.configDotenv()
+dotenv.configDotenv()
 
-const handler = async (event) => {
+export const handler = async (event) => {
   let pool
 
-  const db = new Pool({
+  const db = new pg.Pool({
     user: process.env.USERNAME,
     host: process.env.HOST,
     database: process.env.DB,
@@ -20,8 +18,7 @@ const handler = async (event) => {
   })
 
   try {
-    console.log(event)
-    const body = JSON.parse(event.Records[0].body.toString())
+    const { body } = event.Records[0]
 
     const { id, description } = body
 
@@ -82,6 +79,4 @@ const handler = async (event) => {
   }
 }
 
-module.exports = {
-  handler,
-}
+handler()
