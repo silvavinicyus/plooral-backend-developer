@@ -116,7 +116,22 @@ After installing and preparing the environment, to execute the project it is onl
 
      yarn run test     
  
- 
+
+### Lambdas
+The 2 lambdas (get the feed - moderate job publish) can be found inside the folder <a href="https://github.com/silvavinicyus/plooral-backend-developer/tree/master/lambdas/"> lambdas </a>.
+
+#### Create lambda components
+ 1 - To create the 2 lambda components you'll need to create a .env based on .env.example and add values to those variables, to this way the lambdas can connect to the API database and OpenAI API.
+ 2 - After creating and configuring the .env's, you'll compact all files and folders inside de lambda folders, using .zip format.
+ 3 - Then, with the 2 .zip files, you'll create the lambda in the AWS Console and import the .zip for each lambda created. Make sure to drop the files inside the root folder, that will be created with the lambda function, like this:    
+    <br>
+    /ROOT_FOLDER <br>
+    &ensp;&ensp;&ensp; node_modules <br>
+    &ensp;&ensp;&ensp; .env <br>
+    &ensp;&ensp;&ensp; index.mjs <br>
+    &ensp;&ensp;&ensp; package.json <br>
+
+
 ### Libs & Frameworks 
 <table>
   <thead>
