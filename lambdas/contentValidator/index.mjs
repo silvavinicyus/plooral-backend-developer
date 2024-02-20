@@ -78,5 +78,3 @@ export const handler = async (event) => {
     }
   }
 }
-
-handler()

@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const { Pool } = require('pg')
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
-const doenv = require('dotenv')
+import pg from 'pg'
+import dotenv from 'dotenv'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
-doenv.configDotenv()
+dotenv.configDotenv()
 
-const handler = async (_event) => {
+export const handler = async (_event) => {
   let pool
 
-  const db = new Pool({
+  const db = new pg.Pool({
     user: process.env.USERNAME,
     host: process.env.HOST,
     database: process.env.DB,
@@ -23,7 +23,6 @@ const handler = async (_event) => {
     const query = `SELECT title, description, company_id, created_at FROM jobs WHERE status = 'published'`
     pool = await db.connect()
     const { rows } = await pool.query(query)
-
     const s3 = new S3Client({ region: process.env.S3_REGION })
 
     const command = new PutObjectCommand({
@@ -33,7 +32,6 @@ const handler = async (_event) => {
       Body: JSON.stringify(rows),
       ContentType: 'application/json',
     })
-
     await s3.send(command)
 
     return 200
@@ -47,6 +45,4 @@ const handler = async (_event) => {
   }
 }
 
-module.exports = {
-  handler,
-}
+handler()

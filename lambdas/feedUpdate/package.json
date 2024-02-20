@@ -1,7 +1,7 @@
 {
   "name": "feed_update",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.mjs",
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.515.0",
