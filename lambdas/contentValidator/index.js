@@ -5,21 +5,7 @@ const doenv = require('dotenv')
 
 doenv.configDotenv()
 
-const handler = async (
-  event = {
-    body: {
-      id: '3b40687e-3f47-4372-b4da-885410297e4b',
-      created_at: '2024-02-16T04:40:52.328Z',
-      updated_at: '2024-02-16T04:40:52.328Z',
-      company_id: 'c7047cc0-f40d-4477-9886-e902e6ece0d4',
-      title: 'Job Openning',
-      description: 'Trabalho filha da puta de merda',
-      location: 'Maceió, AL',
-      notes: 'NodeJs, PostgreSQL',
-      status: 'draft',
-    },
-  }
-) => {
+const handler = async (event) => {
   let pool
 
   const db = new Pool({
@@ -34,7 +20,10 @@ const handler = async (
   })
 
   try {
-    const { id, description } = event.body
+    console.log(event)
+    const body = JSON.parse(event.Records[0].body.toString())
+
+    const { id, description } = body
 
     const response = await fetch(process.env.MODERATION_API_URL, {
       method: 'POST',
